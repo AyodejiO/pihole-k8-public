@@ -5,5 +5,4 @@ metadata:
   namespace: pihole
 data:
   custom.list: |
-    # Add your local DNS entries here
-    # 192.168.100.2 dns.foo.net
+    10.0.0.120 pihole.local
