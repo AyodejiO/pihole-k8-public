@@ -5,7 +5,6 @@ metadata:
   namespace: pihole
 data:
   adlists.list: |
-    # Add your local DNS entries here
     https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
     https://v.firebog.net/hosts/Easylist.txt
     https://v.firebog.net/hosts/Easyprivacy.txt
