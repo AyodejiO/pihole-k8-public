@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: pihole-localdns-list
-  namespace: pihole
-data:
-  localdns.list: |
-    10.0.0.120 pihole.local
