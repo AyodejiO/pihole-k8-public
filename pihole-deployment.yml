@@ -35,9 +35,6 @@ spec:
       - name: pihole-adlists-list
         configMap:
           name: pihole-adlists-list
-      - name: pihole-localdns-list
-        configMap:
-          name: pihole-localdns-list
       containers:
       - name: cloudflared
         image: visibilityspots/cloudflared
@@ -104,8 +101,5 @@ spec:
         - mountPath: /etc/pihole/adlists.list
           name: pihole-adlists-list
           subPath: adlists.list
-        - mountPath: /etc/pihole/local.list
-          name: pihole-localdns-list
-          subPath: localdns.list
         - mountPath: /etc/dnsmasq.d
           name: pihole-dnsmasq
