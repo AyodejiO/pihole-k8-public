@@ -1,34 +1,54 @@
+# DNS Service for Primary Deployment
 kind: Service
 apiVersion: v1
 metadata:
-  name: pihole-dns
+  name: pihole-dns-primary
   namespace: pihole
   annotations:
     metallb.universe.tf/allow-shared-ip: pihole
 spec:
   selector:
     app: pihole
+    role: primary
   ports:
-  - port: 53
-    targetPort: 53
-    name: pihole-dns-udp
-    protocol: UDP
-  - port: 53
-    targetPort: 53
-    name: pihole-dns-tcp
-    protocol: TCP
-  - port: 67
-    targetPort: 67
-    name: pihole-67-udp
-    protocol: UDP
+    - port: 53
+      targetPort: 53
+      name: pihole-dns-udp
+      protocol: UDP
+    - port: 53
+      targetPort: 53
+      name: pihole-dns-tcp
+      protocol: TCP
   type: LoadBalancer
-  # You want to assign a fixed ip address
-  # pihole will be used as a DNS server
-  # on your network, and that needs to be a 
-  # well known/unchanging address.
-  loadBalancerIP: 10.0.0.120 
+  loadBalancerIP: 10.0.0.120
   sessionAffinity: ClientIP
 ---
+# DNS Service for Secondary Deployment
+kind: Service
+apiVersion: v1
+metadata:
+  name: pihole-dns-secondary
+  namespace: pihole
+  annotations:
+    metallb.universe.tf/allow-shared-ip: pihole
+spec:
+  selector:
+    app: pihole
+    role: secondary
+  ports:
+    - port: 53
+      targetPort: 53
+      name: pihole-dns-udp
+      protocol: UDP
+    - port: 53
+      targetPort: 53
+      name: pihole-dns-tcp
+      protocol: TCP
+  type: LoadBalancer
+  loadBalancerIP: 10.0.0.121 # Use a separate IP for the secondary DNS service
+  sessionAffinity: ClientIP
+---
+# Web Interface for Primary Deployment
 kind: Service
 apiVersion: v1
 metadata:
@@ -39,15 +59,16 @@ metadata:
 spec:
   selector:
     app: pihole
+    role: primary
   ports:
-  - port: 80
-    targetPort: 80
-    name: http
-    protocol: TCP
-  - port: 443
-    targetPort: 443
-    name: https
+    - port: 80
+      targetPort: 80
+      name: http
+      protocol: TCP
+    - port: 443
+      targetPort: 443
+      name: https
+      protocol: TCP
   type: LoadBalancer
-  # use the same ip address as used previously
-  loadBalancerIP:  10.0.0.120
+  loadBalancerIP: 10.0.0.120 # Same IP as the primary DNS service
   sessionAffinity: ClientIP

@@ -3,7 +3,8 @@ kind: Deployment
 metadata:
   labels:
     app: pihole
-  name: pihole
+    role: secondary
+  name: pihole-ro
   namespace: pihole
 spec:
   replicas: 2
@@ -19,6 +20,7 @@ spec:
     metadata:
       labels:
         app: pihole
+        role: secondary
     spec:
       dnsPolicy: ClusterFirst
       restartPolicy: Always
@@ -35,29 +37,25 @@ spec:
         - name: pihole-adlists-list
           configMap:
             name: pihole-adlists-list
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - pihole
+              - key: role
+                operator: In
+                values:
+                - secondary
+            topologyKey: "kubernetes.io/hostname"
       containers:
-        - name: cloudflared
-          image: visibilityspots/cloudflared
-          env:
-            - name: PORT
-              value: "5053"
-          resources:
-            requests:
-              memory: "50Mi"
-              cpu: "250m"
-            limits:
-              memory: "100Mi"
-              cpu: "500m"
-          ports:
-            - containerPort: 5053
-              name: cf-tcp
-              protocol: TCP
-            - containerPort: 5053
-              name: cf-udp
-              protocol: UDP
         - name: pihole
           image: pihole/pihole:latest
           imagePullPolicy: Always
+          terminationGracePeriodSeconds: 60
           resources:
             requests:
               memory: "50Mi"
@@ -67,11 +65,9 @@ spec:
               cpu: "500m"
           env:
             - name: TZ
-              value: America/Los_Angeles
-            - name: WEBPASSWORD
-              value: nojunk
+              value: Europe/London
             - name: DNS1
-              value: 127.0.0.1#5053
+              value: 1.1.1.1
             - name: DNSMASQ_LISTENING
               value: all
             - name: FTLCONF_CHECK_DISK
@@ -83,18 +79,10 @@ spec:
             - containerPort: 53
               name: pihole-dns-udp
               protocol: UDP
-            - containerPort: 67
-              name: pihole-67-udp
-              protocol: UDP
-            - containerPort: 80
-              name: http
-              protocol: TCP
-            - containerPort: 443
-              name: https
-              protocol: TCP
           volumeMounts:
             - mountPath: /etc/pihole
               name: pihole-config
+              readOnly: true
             - mountPath: /etc/pihole/custom.list
               name: pihole-custom-list
               subPath: custom.list
@@ -103,15 +91,21 @@ spec:
               subPath: adlists.list
             - mountPath: /etc/dnsmasq.d
               name: pihole-dnsmasq
+              readOnly: true
           livenessProbe:
-            httpGet:
-              path: /admin/
-              port: 80
+            exec:
+              command:
+              - dig
+              - "@127.0.0.1"
+              - google.com
             initialDelaySeconds: 30
             periodSeconds: 10
           readinessProbe:
-            httpGet:
-              path: /admin/
-              port: 80
+            exec:
+              command:
+              - dig
+              - "@127.0.0.1"
+              - google.com
             initialDelaySeconds: 30
             periodSeconds: 10
+
