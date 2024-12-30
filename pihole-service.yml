@@ -20,7 +20,7 @@ spec:
       name: pihole-dns-tcp
       protocol: TCP
   type: LoadBalancer
-  loadBalancerIP: 10.0.0.120
+  loadBalancerIP: 10.0.0.100
   sessionAffinity: ClientIP
 ---
 # DNS Service for Secondary Deployment
@@ -45,7 +45,7 @@ spec:
       name: pihole-dns-tcp
       protocol: TCP
   type: LoadBalancer
-  loadBalancerIP: 10.0.0.121 # Use a separate IP for the secondary DNS service
+  loadBalancerIP: 10.0.0.101 # Use a separate IP for the secondary DNS service
   sessionAffinity: ClientIP
 ---
 # Web Interface for Primary Deployment
@@ -70,5 +70,5 @@ spec:
       name: https
       protocol: TCP
   type: LoadBalancer
-  loadBalancerIP: 10.0.0.120 # Same IP as the primary DNS service
+  loadBalancerIP: 10.0.0.100 # Same IP as the primary DNS service
   sessionAffinity: ClientIP
