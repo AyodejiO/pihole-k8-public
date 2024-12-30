@@ -53,7 +53,6 @@ spec:
         - name: pihole
           image: pihole/pihole:latest
           imagePullPolicy: Always
-          terminationGracePeriodSeconds: 60
           resources:
             requests:
               memory: "50Mi"
