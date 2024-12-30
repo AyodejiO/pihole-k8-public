@@ -39,20 +39,14 @@ spec:
             name: pihole-adlists-list
       affinity:
         podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - pihole
-                - key: role
-                  operator: In
-                  values:
-                  - secondary
-              topologyKey: "kubernetes.io/hostname"
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: role
+                operator: In
+                values:
+                - secondary
+            topologyKey: "kubernetes.io/hostname"
       containers:
         - name: pihole
           image: pihole/pihole:latest
