@@ -5,4 +5,4 @@ metadata:
   namespace: pihole
 data:
   custom.list: |
-    10.0.0.100 pihole.local
+    10.0.0.120 pihole.local
