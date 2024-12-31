@@ -1,3 +1,6 @@
+# This is the configuration for the home cluster
+# for the Pi-hole application.
+# It includes a custom list for DNS resolution.
 apiVersion: v1
 kind: ConfigMap
 metadata:
