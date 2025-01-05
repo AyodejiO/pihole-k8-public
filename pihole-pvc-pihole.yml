@@ -4,7 +4,7 @@ metadata:
   name: pihole-pvc-pihole
   namespace: pihole
 spec:
-  storageClassName: nfs-csi
+  storageClassName: openebs-jiva-csi-default
   accessModes:
     - ReadWriteMany
   resources:
