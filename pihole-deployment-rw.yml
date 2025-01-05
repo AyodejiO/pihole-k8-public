@@ -74,8 +74,8 @@ spec:
               value: Europe/London
             - name: WEBPASSWORD
               value: nojunk
-            - name: DNS1
-              value: 127.0.0.1#5053
+            - name: PIHOLE_DNS_
+              value: 127.0.0.1#5053;127.0.0.1
             - name: DNSMASQ_LISTENING
               value: all
             - name: FTLCONF_CHECK_DISK
