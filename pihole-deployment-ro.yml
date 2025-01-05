@@ -30,7 +30,7 @@ spec:
             claimName: pihole-pvc-pihole
         - name: pihole-dnsmasq
           persistentVolumeClaim:
-            claimName: pihole-pvc-dnsmasq
+            claimName: pihole-pvc-dnsmasq-ro
         - name: pihole-custom-list
           configMap:
             name: pihole-custom-list
