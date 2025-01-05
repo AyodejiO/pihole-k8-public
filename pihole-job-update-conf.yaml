@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pihole-config-update
+  namespace: pihole
+  labels:
+    app: pihole
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  template:
+    spec:
+      containers:
+      - name: update-config
+        image: busybox
+        command: [ "sh", "-c", "echo 'server=/local/127.0.0.1' > /mnt/dnsmasq/02-custom.conf && echo 'Pi-hole custom config applied'" ]
+        volumeMounts:
+        - name: pihole-config
+          mountPath: /mnt/dnsmasq
+      restartPolicy: Never
+      volumes:
+      - name: pihole-config
+        persistentVolumeClaim:
+          claimName: pihole-pvc-dnsmasq
+  backoffLimit: 1
