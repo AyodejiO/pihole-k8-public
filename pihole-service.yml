@@ -22,7 +22,9 @@ spec:
   type: LoadBalancer
   loadBalancerIP: 10.0.0.100
   sessionAffinity: ClientIP
+  externalTrafficPolicy: Local
 ---
+
 # DNS Service for Secondary Deployment
 kind: Service
 apiVersion: v1
@@ -48,6 +50,7 @@ spec:
   loadBalancerIP: 10.0.0.101 # Use a separate IP for the secondary DNS service
   sessionAffinity: ClientIP
 ---
+
 # Web Interface for Primary Deployment
 kind: Service
 apiVersion: v1
