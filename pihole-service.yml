@@ -72,3 +72,4 @@ spec:
   type: LoadBalancer
   loadBalancerIP: 10.0.0.100 # Same IP as the primary DNS service
   sessionAffinity: ClientIP
+  externalTrafficPolicy: Local
