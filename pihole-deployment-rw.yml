@@ -88,7 +88,7 @@ spec:
             - name: REV_SERVER_DOMAIN
               value: "kintbury"
             - name: REV_SERVER_TARGET
-              value: "10.0.0.120"
+              value: "10.152.183.196"
             - name: REV_SERVER_CIDR
               value: "10.0.0.0/24"
           ports:
