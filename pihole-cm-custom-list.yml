@@ -8,4 +8,4 @@ metadata:
   namespace: pihole
 data:
   custom.list: |
-    10.0.0.120 grafana.kintbury
+    110.152.183.87 grafana.kintbury
