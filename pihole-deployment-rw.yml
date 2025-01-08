@@ -37,6 +37,9 @@ spec:
         - name: pihole-adlists-list
           configMap:
             name: pihole-adlists-list
+        - name: pihole-dnsmasq-config
+          configMap:
+            name: pihole-dnsmasq-supplementary
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
