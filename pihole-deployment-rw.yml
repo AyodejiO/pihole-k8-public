@@ -47,6 +47,17 @@ spec:
                   operator: In
                   values:
                   - primary
+      initContainers:
+        - name: create-dnsmasq-config
+          image: busybox
+          command: ["/bin/sh", "-c"]
+          args:
+            - cp /config/99-wildcard.conf /etc/dnsmasq.d/99-wildcard.conf;
+          volumeMounts:
+            - name: pihole-dnsmasq-config
+              mountPath: /config
+            - mountPath: /etc/dnsmasq.d
+              name: pihole-dnsmasq
       containers:
         - name: cloudflared
           image: visibilityspots/cloudflared
