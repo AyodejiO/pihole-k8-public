@@ -4,7 +4,7 @@ metadata:
   name: pihole-ingress
   namespace: pihole
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: "/$1"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     cert-manager.io/cluster-issuer: "selfsigned-cluster-issuer"
 spec:
@@ -12,7 +12,7 @@ spec:
   - host: pihole.kintbury
     http:
       paths:
-      - path: /
+      - path: /(.*)
         pathType: Prefix
         backend:
           service:
