@@ -97,14 +97,8 @@ spec:
               value: "0"
             - name: WEBTHEME
               value: lcars
-            # - name: REV_SERVER
-            #   value: "true"
-            # - name: REV_SERVER_DOMAIN
-            #   value: "kintbury"
-            # - name: REV_SERVER_TARGET
-            #   value: "10.0.0.1"
-            # - name: REV_SERVER_CIDR
-            #   value: "10.0.0.0/24"
+            - name: VIRTUAL_HOST
+              value: pihole.kintbury
           ports:
             - containerPort: 53
               name: pihole-dns-tcp
@@ -114,9 +108,6 @@ spec:
               protocol: UDP
             - containerPort: 80
               name: http
-              protocol: TCP
-            - containerPort: 443
-              name: https
               protocol: TCP
           volumeMounts:
             - mountPath: /etc/pihole
