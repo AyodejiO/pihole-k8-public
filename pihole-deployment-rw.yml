@@ -99,6 +99,12 @@ spec:
               value: lcars
             - name: VIRTUAL_HOST
               value: pihole.kintbury
+            - name: PROXY_LOCATION
+              value: pihole
+            - name: VIRTUAL_PORT
+              value: "80"
+            - name: FTLCONF_LOCAL_IPV4
+              value: "10.0.0.120"
           ports:
             - containerPort: 53
               name: pihole-dns-tcp
