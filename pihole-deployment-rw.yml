@@ -51,11 +51,13 @@ spec:
                   values:
                   - nvme
         podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  app: pihole  # Label of the pods to spread
-              topologyKey: topology.kubernetes.io/rack
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: pihole
+                topologyKey: topology.kubernetes.io/rack
       initContainers:
         - name: create-dnsmasq-config
           image: busybox
