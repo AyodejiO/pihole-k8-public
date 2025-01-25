@@ -38,15 +38,21 @@ spec:
           configMap:
             name: pihole-adlists-list
       affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                - key: storage
+                  operator: In
+                  values:
+                  - nvme
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: role
-                operator: In
-                values:
-                - secondary
-            topologyKey: "kubernetes.io/hostname"
+            - labelSelector:
+                matchLabels:
+                  app: pihole  # Label of the pods to spread
+              topologyKey: topology.kubernetes.io/rack
       containers:
         - name: pihole
           image: pihole/pihole:latest
