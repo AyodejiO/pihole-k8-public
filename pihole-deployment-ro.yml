@@ -1,112 +1,112 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    app: pihole
-    role: secondary
-  name: pihole-ro
-  namespace: pihole
-spec:
-  replicas: 0
-  strategy:
-    rollingUpdate:
-      maxSurge: 0
-      maxUnavailable: 0
-    type: RollingUpdate
-  selector:
-    matchLabels:
-      app: pihole
-  template:
-    metadata:
-      labels:
-        app: pihole
-        role: secondary
-    spec:
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
-      volumes:
-        - name: pihole-config
-          persistentVolumeClaim:
-            claimName: pihole-pvc-pihole
-        - name: pihole-dnsmasq
-          persistentVolumeClaim:
-            claimName: pihole-pvc-dnsmasq-ro
-        - name: pihole-custom-list
-          configMap:
-            name: pihole-custom-list
-        - name: pihole-adlists-list
-          configMap:
-            name: pihole-adlists-list
-      affinity:
-        nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              preference:
-                matchExpressions:
-                - key: storage
-                  operator: In
-                  values:
-                  - nvme
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    app: pihole
-                topologyKey: topology.kubernetes.io/rack
-      containers:
-        - name: pihole
-          image: pihole/pihole:latest
-          imagePullPolicy: Always
-          resources:
-            requests:
-              memory: "50Mi"
-              cpu: "250m"
-            limits:
-              memory: "100Mi"
-              cpu: "500m"
-          env:
-            - name: TZ
-              value: Europe/London
-            - name: PIHOLE_DNS_
-              value: 1.1.1.1;1.0.0.1 # Cloudflare
-            - name: DNSMASQ_LISTENING
-              value: all
-            - name: FTLCONF_CHECK_DISK
-              value: "0"
-          ports:
-            - containerPort: 53
-              name: pihole-dns-tcp
-              protocol: TCP
-            - containerPort: 53
-              name: pihole-dns-udp
-              protocol: UDP
-          volumeMounts:
-            - mountPath: /etc/pihole
-              name: pihole-config
-            - mountPath: /etc/pihole/custom.list
-              name: pihole-custom-list
-              subPath: custom.list
-            - mountPath: /etc/pihole/adlists.list
-              name: pihole-adlists-list
-              subPath: adlists.list
-            - mountPath: /etc/dnsmasq.d
-              name: pihole-dnsmasq
-          livenessProbe:
-            exec:
-              command:
-              - dig
-              - "@127.0.0.1"
-              - google.com
-            initialDelaySeconds: 30
-            periodSeconds: 10
-          readinessProbe:
-            exec:
-              command:
-              - dig
-              - "@127.0.0.1"
-              - google.com
-            initialDelaySeconds: 30
-            periodSeconds: 10
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   labels:
+#     app: pihole
+#     role: secondary
+#   name: pihole-ro
+#   namespace: pihole
+# spec:
+#   replicas: 0
+#   strategy:
+#     rollingUpdate:
+#       maxSurge: 0
+#       maxUnavailable: 0
+#     type: RollingUpdate
+#   selector:
+#     matchLabels:
+#       app: pihole
+#   template:
+#     metadata:
+#       labels:
+#         app: pihole
+#         role: secondary
+#     spec:
+#       dnsPolicy: ClusterFirst
+#       restartPolicy: Always
+#       volumes:
+#         - name: pihole-config
+#           persistentVolumeClaim:
+#             claimName: pihole-pvc-pihole
+#         - name: pihole-dnsmasq
+#           persistentVolumeClaim:
+#             claimName: pihole-pvc-dnsmasq-ro
+#         - name: pihole-custom-list
+#           configMap:
+#             name: pihole-custom-list
+#         - name: pihole-adlists-list
+#           configMap:
+#             name: pihole-adlists-list
+#       affinity:
+#         nodeAffinity:
+#           preferredDuringSchedulingIgnoredDuringExecution:
+#             - weight: 100
+#               preference:
+#                 matchExpressions:
+#                 - key: storage
+#                   operator: In
+#                   values:
+#                   - nvme
+#         podAntiAffinity:
+#           preferredDuringSchedulingIgnoredDuringExecution:
+#             - weight: 100
+#               podAffinityTerm:
+#                 labelSelector:
+#                   matchLabels:
+#                     app: pihole
+#                 topologyKey: topology.kubernetes.io/rack
+#       containers:
+#         - name: pihole
+#           image: pihole/pihole:latest
+#           imagePullPolicy: Always
+#           resources:
+#             requests:
+#               memory: "50Mi"
+#               cpu: "250m"
+#             limits:
+#               memory: "100Mi"
+#               cpu: "500m"
+#           env:
+#             - name: TZ
+#               value: Europe/London
+#             - name: PIHOLE_DNS_
+#               value: 1.1.1.1;1.0.0.1 # Cloudflare
+#             - name: DNSMASQ_LISTENING
+#               value: all
+#             - name: FTLCONF_CHECK_DISK
+#               value: "0"
+#           ports:
+#             - containerPort: 53
+#               name: pihole-dns-tcp
+#               protocol: TCP
+#             - containerPort: 53
+#               name: pihole-dns-udp
+#               protocol: UDP
+#           volumeMounts:
+#             - mountPath: /etc/pihole
+#               name: pihole-config
+#             - mountPath: /etc/pihole/custom.list
+#               name: pihole-custom-list
+#               subPath: custom.list
+#             - mountPath: /etc/pihole/adlists.list
+#               name: pihole-adlists-list
+#               subPath: adlists.list
+#             - mountPath: /etc/dnsmasq.d
+#               name: pihole-dnsmasq
+#           livenessProbe:
+#             exec:
+#               command:
+#               - dig
+#               - "@127.0.0.1"
+#               - google.com
+#             initialDelaySeconds: 30
+#             periodSeconds: 10
+#           readinessProbe:
+#             exec:
+#               command:
+#               - dig
+#               - "@127.0.0.1"
+#               - google.com
+#             initialDelaySeconds: 30
+#             periodSeconds: 10
 
