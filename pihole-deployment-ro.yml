@@ -7,11 +7,11 @@ metadata:
   name: pihole-ro
   namespace: pihole
 spec:
-  replicas: 2
+  replicas: 0
   strategy:
     rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
+      maxSurge: 0
+      maxUnavailable: 0
     type: RollingUpdate
   selector:
     matchLabels:
